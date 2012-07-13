@@ -1,0 +1,106 @@
+<?php
+/**
+ * @file
+ * Code for the openpublish Workflow Basic Approval feature.
+ */
+
+function openpublish_workflow_basicapproval_menu() {
+  return array(
+    'admin/config/workbench/moderation/transitions/defaults' => array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('openpublish_workflow_basicapproval_set_permissions'),
+      'access arguments' => array('administer workbench moderation'),
+      'type' => MENU_CALLBACK,
+    ),
+    'admin/config/workbench/access/create' => array(
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('openpublish_workflow_basicapproval_access_create'),
+      'access arguments' => array('administer workbench access'),
+      'type' => MENU_CALLBACK,
+    ),
+  );
+}
+
+function openpublish_workflow_basicapproval_set_permissions($form, $form_state) {
+  return confirm_form($form, t('Are you sure you want to assign default permissions?'), drupal_get_destination());
+}
+
+function openpublish_workflow_basicapproval_set_permissions_submit($form, $form_state) {
+  $roles = user_roles();
+  $transitions = workbench_moderation_transitions();
+
+  foreach ($roles as $rid => $name) {
+    $permissions = array(); 
+    if ($name == 'editor') {
+      $permissions[] = 'use workbench_moderation my drafts tab';
+      $permissions[] = 'use workbench_moderation needs review tab';
+      // Add all state transitions for editors
+      foreach ($transitions as $transition) {
+        $from_state = $transition->from_name;
+        $to_state = $transition->to_name;
+
+        // Always set a permission to perform all moderation states.
+        $permissions[] = "moderate content from $from_state to $to_state";
+      }
+    } elseif ($name == 'staff') {
+      $permissions[] = 'use workbench_moderation my drafts tab';
+      $permissions[] = 'moderate content from draft to needs_review';
+    }
+    if (count($permissions)) {
+      user_role_grant_permissions($rid, $permissions);
+    }
+  }
+}
+
+function openpublish_workflow_basicapproval_access_create($form, $form_state) {
+  return confirm_form($form, t('Are you sure you want to assign default permissions?'), drupal_get_destination());
+}
+
+function openpublish_workflow_basicapproval_access_create_submit($form, $form_state) {
+  module_load_include('inc', 'workbench_access', 'workbench_access.admin');
+  
+  $vocabulary = openpublish_workflow_basicapproval_vocabulary();
+  $exists = workbench_access_vocabulary_exists($vocabulary);
+  if ($exists) {
+    return;
+  }
+  taxonomy_vocabulary_save($vocabulary);
+
+  // Set our vocabulary as the default.
+  variable_set('workbench_access_taxonomy', array($vocabulary->machine_name => $vocabulary->machine_name));
+  // Set taxonomy as the active scheme.
+  variable_set('workbench_access', 'taxonomy');
+
+  // Give the admin account access to all sections.
+  workbench_access_user_section_save(1, 'workbench_access', 'taxonomy');
+
+  // Get all nodes and save them to {workbench_access_node}.
+  $nids = db_query("SELECT nid FROM {node}")->fetchAll();
+  $values = array();
+  foreach ($nids as $nid) {
+    $values[] = array(
+      'nid' => $nid->nid,
+      'access_id' => 'workbench_access',
+      'access_scheme' => 'taxonomy',
+    );
+  }
+  if (empty($values)) {
+    return;
+  }
+  $query = db_insert('workbench_access_node')->fields(array('nid', 'access_id', 'access_scheme'));
+  foreach ($values as $record) {
+    $query->values($record);
+  }
+  $query->execute();
+}
+
+function openpublish_workflow_basicapproval_vocabulary() {
+  $vocabulary = new stdClass();
+  $vocabulary->name = t('Sections');
+  $vocabulary->module = 'workbench_access';
+  $vocabulary->machine_name = 'workbench_access';
+  $vocabulary->description = t('Access control for editorial content.');
+  $vocabulary->hierarchy = 1;
+  $vocabulary->weight = -10;
+  return $vocabulary;
+}

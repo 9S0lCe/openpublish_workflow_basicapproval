@@ -1,0 +1,10 @@
+name = "OpenPublish Workflow (Basic Approval)"
+package = "Features"
+core = "7.x"
+dependencies[] = "workbench"
+dependencies[] = "workbench_moderation"
+dependencies[] = "workbench_access"
+description = "Enable basic approval workflow based on workbench"
+apps[server] = "development"
+apps[manifests][] = "app/manifest.app"
+
