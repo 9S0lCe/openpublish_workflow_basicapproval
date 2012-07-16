@@ -1,10 +1,13 @@
-name = "OpenPublish Workflow (Basic Approval)"
-package = "Features"
-core = "7.x"
-dependencies[] = "workbench"
-dependencies[] = "workbench_moderation"
-dependencies[] = "workbench_access"
-description = "Enable basic approval workflow based on workbench"
-apps[server] = "development"
-apps[manifests][] = "app/manifest.app"
-
+name = OpenPublish Workflow (Basic Approval)
+package = Features
+core = 7.x
+dependencies[] = features
+dependencies[] = workbench
+dependencies[] = workbench_moderation
+dependencies[] = workbench_access
+description = Enable basic approval workflow based on workbench
+apps[server] = development
+apps[manifests][] = app/manifest.app
+features[features_api][] = api:1
+features[user_role][] = editor
+features[user_role][] = staff
