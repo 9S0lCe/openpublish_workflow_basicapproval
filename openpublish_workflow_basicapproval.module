@@ -42,7 +42,8 @@ function openpublish_workflow_basicapproval_set_permissions_submit($form, $form_
         // Always set a permission to perform all moderation states.
         $permissions[] = "moderate content from $from_state to $to_state";
       }
-    } elseif ($name == 'staff') {
+    }
+    elseif ($name == 'staff') {
       $permissions[] = 'use workbench_moderation my drafts tab';
       $permissions[] = 'moderate content from draft to needs_review';
     }

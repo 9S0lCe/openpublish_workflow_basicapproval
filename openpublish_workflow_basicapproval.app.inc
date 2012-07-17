@@ -1,4 +1,8 @@
 <?php
+/**
+ * @file
+ * Code for the openpublish Workflow Basic Approval feature.
+ */
 
 /**
  * Implements hook_apps_app_info()
@@ -34,28 +38,28 @@ function openpublish_workflow_basicapproval_status() {
   return array(
     'items' => array(
       'perm' => array(
-        'severity'=> ($assigned_count == 0) ? REQUIREMENT_WARNING : REQUIREMENT_OK,
+        'severity' => ($assigned_count == 0) ? REQUIREMENT_WARNING : REQUIREMENT_OK,
         'title' =>  t('Assign moderation permissions'),
         'description' =>  t('To make the most of workflow settings, permissions should be enabled to allow appropriate roles the control to move between workflow states.'),
-        'action' => array(l('Add default permissions', 'admin/config/workbench/moderation/transitions/defaults', array('query' => drupal_get_destination()))),
+        'action' => array(l(t('Add default permissions'), 'admin/config/workbench/moderation/transitions/defaults', array('query' => drupal_get_destination()))),
       ),
       'access' => array(
         'severity' => ($access_configured) ? REQUIREMENT_OK : REQUIREMENT_WARNING,
         'title' => t('Configure access controls'),
         'description' => t('To enable workflow access, a sections vocabulary needs to be created and roles/users assigned to sections.'),
-        'action' => array(l('Create sections', 'admin/config/workbench/access/create', array('query' => drupal_get_destination()))),
+        'action' => array(l(t('Create sections'), 'admin/config/workbench/access/create', array('query' => drupal_get_destination()))),
       ),
       'workbench_moderation' => array(
         'severity' => REQUIREMENT_INFO,
         'title' => t('Configure workflow states/transitions'),
         'description' => t('Moderation settings make it possible to define new states for content along with additional transitions between states for more advanced workflows.'),
-        'action' => array(l('Configure workflow', 'admin/config/workbench/moderation')),
+        'action' => array(l(t('Configure workflow'), 'admin/config/workbench/moderation')),
       ),
       'workbench_access' => array(
         'severity' => REQUIREMENT_INFO,
         'title' => t('Configure section assignments'),
         'description' => t('Assign users/roles to sections to segment editorial responsibilities.'),
-        'action' => array(l('Configure access', 'admin/config/workbench/access')),
+        'action' => array(l(t('Configure access'), 'admin/config/workbench/access')),
       ),
     ),
   );
@@ -74,7 +78,7 @@ function openpublish_workflow_basicapproval_configure($form, $form_state) {
 
   $types = array();
   $types_selected = array();
-  foreach(node_type_get_types() as $name => $type) {
+  foreach (node_type_get_types() as $name => $type) {
     $types[$name] = $type->name;
     if (workbench_moderation_node_type_moderated($name)) {
       $types_selected[$name] = $name;
@@ -112,6 +116,6 @@ function openpublish_workflow_basicapproval_configure_submit($form, $form_state)
         unset($options[$key]);
       }
     }
-    variable_set('node_options_'. $type, $options);
+    variable_set('node_options_' . $type, $options);
   }
 }
