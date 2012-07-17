@@ -1,12 +1,12 @@
 name = OpenPublish Workflow (Basic Approval)
-description = "Allow for content-based approval"
+description = "Allow for content-based approval using Workbench."
 machine_name = openpublish_workflow_basicapproval
 version = 1.0
 downloadable = openpublish_workflow_basicapproval 1.0
 author = Phase2 Technology
 author_url = http://www.phase2technology.com/
 logo = workflow_app_icon.png
-screenshot = workflow_screen.jpg
+screenshots[] = workflow_screen.jpg
 
 dependencies[workbench] = workbench 1.0
 dependencies[workbench_moderation] = workbench_moderation 1.1
