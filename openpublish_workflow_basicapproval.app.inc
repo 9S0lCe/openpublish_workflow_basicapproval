@@ -32,9 +32,6 @@ function openpublish_workflow_basicapproval_status() {
     ->condition('rid', array_keys($roles), 'IN')
     ->countQuery()->execute()->fetchField();
 
-
-  $access_configured = variable_get('workbench_access_taxonomy', FALSE);
-
   return array(
     'items' => array(
       'perm' => array(
@@ -43,23 +40,11 @@ function openpublish_workflow_basicapproval_status() {
         'description' =>  t('To make the most of workflow settings, permissions should be enabled to allow appropriate roles the control to move between workflow states.'),
         'action' => array(l(t('Add default permissions'), 'admin/config/workbench/moderation/transitions/defaults', array('query' => drupal_get_destination()))),
       ),
-      'access' => array(
-        'severity' => ($access_configured) ? REQUIREMENT_OK : REQUIREMENT_WARNING,
-        'title' => t('Configure access controls'),
-        'description' => t('To enable workflow access, a sections vocabulary needs to be created and roles/users assigned to sections.'),
-        'action' => array(l(t('Create sections'), 'admin/config/workbench/access/create', array('query' => drupal_get_destination()))),
-      ),
       'workbench_moderation' => array(
         'severity' => REQUIREMENT_INFO,
         'title' => t('Configure workflow states/transitions'),
         'description' => t('Moderation settings make it possible to define new states for content along with additional transitions between states for more advanced workflows.'),
         'action' => array(l(t('Configure workflow'), 'admin/config/workbench/moderation')),
-      ),
-      'workbench_access' => array(
-        'severity' => REQUIREMENT_INFO,
-        'title' => t('Configure section assignments'),
-        'description' => t('Assign users/roles to sections to segment editorial responsibilities.'),
-        'action' => array(l(t('Configure access'), 'admin/config/workbench/access')),
       ),
     ),
   );
