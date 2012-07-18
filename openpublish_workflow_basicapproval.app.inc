@@ -19,8 +19,6 @@ function openpublish_workflow_basicapproval_apps_app_info() {
  * Configuration form for workflow app
  */
 function openpublish_workflow_basicapproval_status() {
-
-
   $roles = user_roles();
   // exclude anonymous & admin
   $admin_rid = variable_get('user_admin_role', 0);
@@ -76,7 +74,6 @@ function openpublish_workflow_basicapproval_configure($form, $form_state) {
     '#options' => $types,
     '#default_value' => $types_selected,
   );
-
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => 'Save',
