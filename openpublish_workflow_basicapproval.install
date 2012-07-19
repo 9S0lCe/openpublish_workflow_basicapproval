@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_disable()
+ * 
+ * Disables Workbench modules enabled by the app.
+ */
+function openpublish_workflow_basicapproval_disable() {
+  module_disable(array('workbench_moderation', 'workbench'), FALSE);
+  drupal_set_message(t('Workbench and Workbench Moderation have been disabled.'));
+}
+
+/**
+ * Implements hook_uninstall()
+ * 
+ * Uninstalls Workbench modules installed by the app.
+ */
+function openpublish_workflow_basicapproval_uninstall() {
+  drupal_uninstall_modules(array('workbench_moderation', 'workbench'), FALSE);
+  drupal_set_message(t('Workbench and Workbench Moderation have been uninstalled.'));
+}
