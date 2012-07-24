@@ -38,12 +38,6 @@ function openpublish_workflow_basicapproval_status() {
         'description' =>  t('To make the most of workflow settings, permissions should be enabled to allow appropriate roles the control to move between workflow states.'),
         'action' => array(l(t('Add default permissions'), 'admin/config/workbench/moderation/transitions/defaults', array('query' => drupal_get_destination()))),
       ),
-      'workbench_moderation' => array(
-        'severity' => REQUIREMENT_INFO,
-        'title' => t('Configure workflow states/transitions'),
-        'description' => t('Moderation settings make it possible to define new states for content along with additional transitions between states for more advanced workflows.'),
-        'action' => array(l(t('Configure workflow'), 'admin/config/workbench/moderation')),
-      ),
     ),
   );
 }
