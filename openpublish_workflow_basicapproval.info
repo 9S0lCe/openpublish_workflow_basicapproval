@@ -1,7 +1,6 @@
 name = OpenPublish Workflow (Basic Approval)
 package = Features
 core = 7.x
-dependencies[] = features
 dependencies[] = openpublish_roles
 dependencies[] = workbench
 dependencies[] = workbench_moderation

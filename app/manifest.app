@@ -8,6 +8,7 @@ author_url = http://www.phase2technology.com/
 logo = workflow_app_icon.png
 screenshots[] = workflow_screen.jpg
 
+dependencies[openpublish_roles] = openpublish_roles
 dependencies[workbench] = workbench 1.0
 dependencies[workbench_moderation] = workbench_moderation 1.1
 
